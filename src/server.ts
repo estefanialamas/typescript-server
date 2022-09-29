@@ -1,10 +1,9 @@
 import express, {NextFunction, Request, Response} from 'express';
 
 import { UserRepositoryMongo } from './user-repository-mongo';
+import { DogRepositoryMongo } from './dog-repository-mongo';
 import { userRouter } from './presentation';
-// import { Dog, Breed } from './domain/models/dog';
-// import User from './domain/models/user';
-// import dogRouter from './presentation/dog-router';
+import { dogRouter } from './presentation/dog-router';
 
 
 const app = express();
@@ -20,9 +19,10 @@ app.use((req: Request, res: Response, next: NextFunction) => {
 })
 
 const userRepository = new UserRepositoryMongo();
+const dogRepository = new DogRepositoryMongo();
 
-// app.use('/dog', dogRouter)
 app.use('/users', userRouter(userRepository))
+app.use('/dog', dogRouter(dogRepository))
 
 app.listen(3200, () => { 
     console.log('Server running on port 3200')

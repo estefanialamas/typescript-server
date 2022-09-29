@@ -1,4 +1,4 @@
-import { Dog, Breed} from "./dog";
+import { Dog } from "./dog";
 
 class User {
     name: string;
