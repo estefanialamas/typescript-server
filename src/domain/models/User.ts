@@ -2,10 +2,12 @@ import { Dog } from "./dog";
 
 class User {
     name: string;
+    email: string;
     dogs: Dog[];
 
-    constructor(name: string, dogs: Dog[]) {
+    constructor(name: string, email: string, dogs: Dog[]) {
         this.name = name;
+        this.email = email;
         this.dogs = dogs;
     }
 
