@@ -26,7 +26,7 @@ import { UserRepository } from "./presentation/user-repository";
   const dogRepository = new DogRepositoryMongo(dogsCollection);
 
   app.use("/users", userRouter(userRepository));
-  app.use("/dog", dogRouter(dogRepository));
+  app.use("/dogs", dogRouter(dogRepository));
 
   app.listen(3200, () => {
     console.log("Server running on port 3200");

@@ -13,11 +13,8 @@ export function userRouter(userRepository: UserRepository): Router {
 
     userRouter.post('/', (req: Request, res: Response) => {
         console.log('post route working')
-        
         const { name, email } = req.body;
-
         userRepository.save({ name, email } as User);
-
         res.json({ name, email })
     })
 

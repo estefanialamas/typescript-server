@@ -10,8 +10,12 @@ export class DogRepositoryMongo implements DogRepository {
         this.dogsCollection = dogsCollection;
     }
 
-    save(dog: Dog): void {
-        throw new Error("Method not implemented.");
+    async save(dog: Dog): Promise<void> {
+       const dogToSave = {
+        name: dog.name,
+        breed: dog.breed
+       }
+       await this.dogsCollection.insertOne(dogToSave)
     }
     findByName(name: string): Dog {
         throw new Error("Method not implemented.");

@@ -1,5 +1,6 @@
 import express, { Router } from 'express'
 import { Request, Response } from 'express'
+import { Dog } from '../domain/models/dog'
 import { DogRepository } from './dog-repository'
 
 
@@ -8,15 +9,17 @@ export function dogRouter(dogRepository: DogRepository): Router {
     
     dogRouter.get('/', (req: Request, res: Response) => {
         console.log('dog')
-        res.send('Hello Dog')
+        res.json('Hello Dog')
     })
     
-    dogRouter.post('/:id', (req: Request, res: Response) => {
+    dogRouter.post('/', (req: Request, res: Response) => {
         console.log('dog post route working')
-        res.send ('new dog!')
+        const { name, breed } = req.body;
+        dogRepository.save({ name, breed } as Dog)
+        res.json({ name, breed })
     })
     
-    dogRouter.put('/', (req: express.Request, res: express.Response) => {
+    dogRouter.put('/:id', (req: express.Request, res: express.Response) => {
         console.log('edited doggy')
         res.send ('edited doggy')
     })
