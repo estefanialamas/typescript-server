@@ -1,20 +1,8 @@
-enum Breed {
-    POODLE,
-    GOLDEN_RETRIEVER,
-    CHIHUAHA,
-    CAVALIER,
-    BEAGLE,
-    BICHON_FRISE,
-    BORDER_COLLIE,
-    GREYHOUND,
-    DACHSUND
-}
-
 class Dog {
     name: string;
-    breed: Breed;
+    breed: string;
 
-    constructor(name: string, breed: Breed) {
+    constructor(name: string, breed: string) {
         this.name = name;
         this.breed = breed;
     }
@@ -26,4 +14,4 @@ class Dog {
 
 
 
-export { Dog, Breed };
+export { Dog };

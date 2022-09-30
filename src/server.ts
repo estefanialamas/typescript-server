@@ -1,10 +1,10 @@
 import express, { NextFunction, Request, Response } from "express";
 
-import { UserRepositoryMongo } from "./user-repository-mongo";
-import { DogRepositoryMongo } from "./dog-repository-mongo";
+import { UserRepositoryMongo } from "./infrastructure/user-repository-mongo";
+import { DogRepositoryMongo } from "./infrastructure/dog-repository-mongo";
 import { userRouter } from "./presentation";
-import { dogRouter } from "./presentation/dog-router";
-import { connectToDatabase } from "./connect-db";
+import { dogRouter } from "./presentation/routers/dog-router";
+import { connectToDatabase } from "./infrastructure/connect-db";
 import { UserRepository } from "./presentation/user-repository";
 
 (async () => {
