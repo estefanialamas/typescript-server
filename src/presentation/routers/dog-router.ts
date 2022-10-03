@@ -5,9 +5,22 @@ import { DogRepository } from '../dog-repository'
 import Ajv from 'ajv';
 
 
+
 export function dogRouter(dogRepository: DogRepository): Router {
     const dogRouter = express.Router()
     
+    const ajv = new Ajv(); // No instanciar dentro de post
+
+    const dogSchema = {
+        type: "object",
+        properties: {
+            name: { type: "string" },
+            breed: { type: "string" },
+        },
+        required: ["name", "breed"],
+        additionalProperties: false,
+    }
+
     dogRouter.get('/', (req: Request, res: Response) => {
         console.log('dog')
         res.json('Hello Dog')
@@ -16,19 +29,11 @@ export function dogRouter(dogRepository: DogRepository): Router {
     dogRouter.post('/', (req: Request, res: Response) => {
         console.log('dog post route working')
         
-        const ajv = new Ajv();
-        const dogSchema = {
-            type: "object",
-            properties: {
-                name: { type: "string" },
-                breed: { type: "string" },
-            },
-            required: ["name", "breed"],
-            additionalProperties: false,
-        }
         
         const valid = ajv.validate(dogSchema, req.body);
+
         if(!valid) {
+            console.log(ajv.errors.map(e => e.message))
             res.status(400).json({
                 result: 'KO',
                 errors: ajv.errors.map(e => e.message)
