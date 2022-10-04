@@ -3,7 +3,7 @@ import express, { NextFunction, Request, Response } from "express";
 import { UserRepositoryMongo } from "./infrastructure/user-repository-mongo";
 import { DogRepositoryMongo } from "./infrastructure/dog-repository-mongo";
 import { userRouter } from "./presentation";
-import { dogRouter } from "./presentation/routers/dog-router";
+import { dogRouter } from "./presentation/routers/event-router";
 import { connectToDatabase } from "./infrastructure/connect-db";
 import { UserRepository } from "./presentation/user-repository";
 
@@ -24,7 +24,6 @@ import { UserRepository } from "./presentation/user-repository";
   const dogRepository = new DogRepositoryMongo(dogsCollection);
 
   app.use("/users", userRouter(userRepository));
-  app.use("/dogs", dogRouter(dogRepository));
 
   app.listen(3200, () => {
     console.log("Server running on port 3200");

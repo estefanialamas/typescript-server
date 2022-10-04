@@ -1,4 +1,4 @@
-import  User from "../domain/models/user";
+import  User from "../domain/models/Event";
 import { UserRepository } from "../presentation/user-repository";
 import * as mongoDB from "mongodb";
 

@@ -1,6 +1,6 @@
 import express, { Router } from 'express'
 import { Request, Response } from 'express'
-import User from '../../domain/models/user'
+import User from '../../domain/models/Event'
 import {UserRepository} from '../user-repository'
 
 export function userRouter(userRepository: UserRepository): Router {
