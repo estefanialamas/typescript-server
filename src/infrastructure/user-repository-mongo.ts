@@ -3,7 +3,6 @@ import { UserRepository } from "../presentation/user-repository";
 import * as mongoDB from "mongodb";
 
 
-
 export class UserRepositoryMongo implements UserRepository {
 
     private usersCollection : mongoDB.Collection;

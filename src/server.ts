@@ -11,8 +11,6 @@ import { UserRepository } from "./presentation/user-repository";
   
   const app = express();
   
-  app.use(express.static("public"));
-  
   app.use(express.json());
   app.use(express.urlencoded({ extended: true }));
   
@@ -32,7 +30,3 @@ import { UserRepository } from "./presentation/user-repository";
     console.log("Server running on port 3200");
   });
 })();
-
-// const rosco = new Dog('Rosco', Breed.POODLE);
-// const fani = new User('Fani', [rosco]);
-// fani.introduce()

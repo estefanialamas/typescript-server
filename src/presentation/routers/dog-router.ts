@@ -9,17 +9,39 @@ import Ajv from 'ajv';
 export function dogRouter(dogRepository: DogRepository): Router {
     const dogRouter = express.Router()
     
-    const ajv = new Ajv(); // No instanciar dentro de post
+    const ajv = new Ajv({allErrors: true}) // No instanciar dentro de post
+    require("ajv-errors")(ajv); 
+    
+    ajv.addKeyword('isNotEmpty', {
+        type: 'string',
+        validate: function (_dogSchema: any, data: string | any[]) {
+            return typeof data === 'string' && data.length > 0;
+        },
+        errors: false,
+        keyword: 'isNotEmpty'
+    });
 
     const dogSchema = {
         type: "object",
         properties: {
-            name: { type: "string" },
-            breed: { type: "string" },
+            name: { 
+                type: "string",
+                isNotEmpty: true,
+                errorMessage: "Name field can't be empty"
+         },
+            breed: { 
+                type: "string",
+                isNotEmpty: true,
+                errorMessage: "Breed field can't be empty"
+            },
+           
         },
         required: ["name", "breed"],
         additionalProperties: false,
+        
     }
+    
+
 
     dogRouter.get('/', (req: Request, res: Response) => {
         console.log('dog')
@@ -33,10 +55,10 @@ export function dogRouter(dogRepository: DogRepository): Router {
         const valid = ajv.validate(dogSchema, req.body);
 
         if(!valid) {
-            console.log(ajv.errors.map(e => e.message))
+            console.log(ajv.errors)
             res.status(400).json({
                 result: 'KO',
-                errors: ajv.errors.map(e => e.message)
+                errors: ajv.errors.map(e => `${e.message}`)
             });
             return; 
         }
@@ -47,16 +69,6 @@ export function dogRouter(dogRepository: DogRepository): Router {
             result: 'OK',
             message: `saved Dog: ${name}, ${breed}`
         })
-    })
-    
-    dogRouter.put('/:id', (req: express.Request, res: express.Response) => {
-        console.log('edited doggy')
-        res.send ('edited doggy')
-    })
-    
-    dogRouter.delete('/', (req: express.Request, res: express.Response) => {
-        console.log('deleted dog')
-        res.send ('deleted dog')
     })
 
     return dogRouter
