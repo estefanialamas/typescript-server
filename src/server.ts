@@ -1,16 +1,9 @@
 import express, { NextFunction, Request, Response } from "express";
-import  SpotifyWebApiNode  from "spotify-web-api-node";
-import { loginRouter } from "./presentation/routers/login-router";
-import { userRouter } from "./presentation/routers/user-router";
 import dotenv from 'dotenv'
-
 dotenv.config()
 
-const spotifyApi = new SpotifyWebApiNode({
-    clientId: process.env.CLIENT_ID,
-    clientSecret: process.env.CLIENT_SECRET,
-    redirectUri: process.env.REDIRECT_URI
-});
+import { loginRouter } from "./presentation/routers/login-router";
+import { userRouter } from "./presentation/routers/user-router";
 
 
 (async () => {
@@ -25,8 +18,8 @@ const spotifyApi = new SpotifyWebApiNode({
   //   next();
   // });
   
-  app.use("/login", loginRouter(spotifyApi));
-  app.use("/user", userRouter(spotifyApi));
+  app.use("/login", loginRouter());
+  app.use("/users", userRouter());
 
   // const { usersCollection, dogsCollection } = await connectToDatabase();
   // const userRepository: UserRepository = new UserRepositoryMongo(usersCollection);

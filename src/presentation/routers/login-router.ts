@@ -1,42 +1,32 @@
 import express, { Router } from 'express'
 import { Request, Response } from 'express'
-import  SpotifyWebApiNode  from 'spotify-web-api-node'
-import dotenv from 'dotenv'
+import axios from 'axios'
+import qs from 'qs'
 
-dotenv.config()
-
-const spotifyApi = new SpotifyWebApiNode({
-    clientId: process.env.CLIENT_ID,
-    clientSecret: process.env.CLIENT_SECRET,
-    redirectUri: process.env.REDIRECT_URI
-})
-
-export function loginRouter( spotifyApi: SpotifyWebApiNode): Router {
+export function loginRouter(): Router {
      
-    const loginRouter = express.Router()
+    const loginRouter = express.Router();
+    const qsGrandType = qs.stringify({'grant_type':'client_credentials'});
+    const authHeader = Buffer.from(process.env.CLIENT_ID + ':' + process.env.CLIENT_SECRET).toString('base64');
     
 
-    loginRouter.get('/', (req: Request, res: Response) => {
-        const scopes = ['user-read-private', 'user-read-email']
-        const state = 'some-state';
-        const authorizeURL = spotifyApi.createAuthorizeURL(scopes, state)
-        res.redirect(authorizeURL)
-    })
-
-    loginRouter.get('/callback', (req: Request, res: Response) => {
-        const { code } = req.query
-        const redirectUri = process.env.REDIRECT_URI
-        spotifyApi.authorizationCodeGrant(code as string).then(
-            data => {
-                const { access_token, refresh_token } = data.body
-                spotifyApi.setAccessToken(access_token)
-                spotifyApi.setRefreshToken(refresh_token)
-                res.redirect(redirectUri)
+    loginRouter.post('/', async (req: Request, res: Response) => {
+        try {
+        const response = await axios({
+            method: 'POST',
+            headers: {
+                'content-type':'application/x-www-form-urlencoded',
+                'Authorization': `Basic ${authHeader}`
             },
-            err => {
-                console.log('Something went wrong!', err)
-            }
-        )
+            data: qsGrandType,
+            url: 'https://accounts.spotify.com/api/token',
+        })
+        process.env.TOKEN = response.data.access_token
+        res.send(response.data);
+
+        } catch(err) {
+            res.status(500).send(err)
+        }
     })
 
     return loginRouter
