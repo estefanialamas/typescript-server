@@ -1,6 +1,7 @@
-import User from '../domain/models/user'
+import User from '../domain/models/User'
 
 export interface UserRepository {
-    findByName(name: string): User;
-    save(user: User): void;
+    getUserByAccessToken(accessToken: string): Promise<User>;
 }
+
+
