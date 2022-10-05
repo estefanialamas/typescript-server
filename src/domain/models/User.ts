@@ -1,8 +1,5 @@
-export interface User {
-    id: string;
-    name: string;
-    // email: string;
-    // password: string;
-    image: string;
-    url: string;
+export  default interface User {
+    user_id: string;
+    username: string;
+    access_token: string;
 }

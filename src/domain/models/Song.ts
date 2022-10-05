@@ -6,7 +6,6 @@ export interface Song {
     year: number;
     genre: string;
     duration: number;
-    lyrics: string;
     cover: string;
     url: string;
 }

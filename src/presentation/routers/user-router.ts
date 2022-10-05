@@ -1,23 +1,42 @@
 import express, { Router } from 'express'
 import { Request, Response } from 'express'
-import User from '../../domain/models/Event'
-import {UserRepository} from '../user-repository'
+import  SpotifyWebApiNode  from 'spotify-web-api-node'
+import dotenv from 'dotenv'
+import querystring from 'query-string'
 
-export function userRouter(userRepository: UserRepository): Router {
+dotenv.config()
 
+const spotifyApi = new SpotifyWebApiNode({
+    clientId: process.env.CLIENT_ID,
+    clientSecret: process.env.CLIENT_SECRET,
+    redirectUri: process.env.REDIRECT_URI
+})
+
+export function userRouter (spotifyApi: SpotifyWebApiNode): Router {
+    
     const userRouter = express.Router()
 
-    userRouter.get('/', (req: Request, res: Response) => {
-        res.json('Hello World')
+    userRouter.get('/me', async (req: Request, res: Response) => {
+
+        const { access_token } = req.query
+        console.log(access_token)
+        try {
+            spotifyApi.setAccessToken(access_token as string)
+                console.log(access_token)
+                const { body } = await spotifyApi.getMe()
+            res.status(200).json({
+                type: 'Success',
+                message: 'Found user',
+                body})
+        } catch (error) {
+            res.status(404).json({
+                type: 'Error',
+                message: 'User not found',
+                error
+            })
+        }
     })
 
-    userRouter.post('/', (req: Request, res: Response) => {
-        console.log('post route working')
-        const { name, email } = req.body;
-        userRepository.save({ name, email } as User);
-        res.json({ name, email })
-    })
-
-    return userRouter;
-
+    return userRouter
 }
+
