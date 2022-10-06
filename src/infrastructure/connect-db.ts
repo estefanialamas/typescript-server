@@ -1,11 +1,13 @@
 import * as mongoDB from "mongodb";
 import dotenv from "dotenv";
 
-export async function connectToDatabase () {
+import { Configuration } from "../domain/configuration";
+
+export async function connectToDatabase (configuration: Configuration) {
 
     dotenv.config();
-    const client: mongoDB.MongoClient = new mongoDB.MongoClient(process.env.MONGODB_URI);
-    const databaseName = process.env.DB_NAME;
+    const client: mongoDB.MongoClient = new mongoDB.MongoClient(configuration.dbUri);
+    const databaseName = configuration.dbName;
             
     await client.connect();  
 

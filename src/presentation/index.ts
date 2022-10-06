@@ -1,1 +1,1 @@
-export { loginRouter } from './routers/login-router'
+export { userRouter } from './routers/user-router'
