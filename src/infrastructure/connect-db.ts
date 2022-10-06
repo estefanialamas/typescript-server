@@ -17,5 +17,5 @@ export async function connectToDatabase (configuration: Configuration) {
 
     console.log(`Successfully connected to database: '${databaseName}'`);
 
-    return { usersCollection, dogsCollection }
+    return { usersCollection }
  }

@@ -9,22 +9,20 @@ import { Config } from "./infrastructure/configuration";
 (async () => {
   
   const app = express();
-  const configuration = await new Config().setToken();
+  const configuration = await new Config().setToken()
+
+  if (!configuration.appToken) {
+    //configuration.refreshToken = await configuration.getRefreshToken(configuration.refreshToken)
+    const refresh_token = await configuration.getRefreshToken()
+    configuration.refreshToken = refresh_token.refreshToken
+    console.log(refresh_token)
+  }
   
   app.use(express.json());
   app.use(express.urlencoded({ extended: true }));
 
-
-  
-  // app.use((req: Request, res: Response, next: NextFunction) => {
-  //   console.log("middleware baseUrl", req.baseUrl);
-  //   next();
-  // });
   
   app.use("/users", userRouter(configuration.appToken));
-
-  // const { usersCollection, dogsCollection } = await connectToDatabase();
-  // const userRepository: UserRepository = new UserRepositoryMongo(usersCollection);
 
 
   app.listen(configuration.port, () => {

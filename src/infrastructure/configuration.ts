@@ -1,4 +1,6 @@
 import axios from 'axios'
+import { access } from 'fs';
+import { request } from 'http';
 import qs from 'qs'
 import { Configuration } from "../domain/configuration";
 
@@ -9,6 +11,7 @@ export class Config implements Configuration {
     dbUri: string
     dbName: string
     appToken: string
+    refreshToken: string
     constructor() {
         this.port = process.env.PORT;
         this.clientId =  process.env.CLIENT_ID;
@@ -38,4 +41,32 @@ export class Config implements Configuration {
             throw err;
         }
     }
+      public async getRefreshToken() {
+        try {
+        const qsGrandType =qs.stringify({'grant_type':'refresh_token', 'refresh_token': this.refreshToken});
+        const authHeader = Buffer.from(this.clientId + ':' + this.clientSecret).toString('base64');
+        const response = await axios({
+            method: 'POST',
+            headers: {
+                'content-type':'application/x-www-form-urlencoded',
+                'Authorization': `Basic ${authHeader}`
+            },
+            data: qsGrandType,
+            url: 'https://accounts.spotify.com/api/token',
+        })
+
+    //    console.log(response)
+
+        this.refreshToken = (response as any).data.refresh_token;
+
+        // console.log(this.refreshToken)
+        return this
+            
+        } catch (err) {
+            console.error(err)
+            throw err;
+        }
     }
+}
+
+    
