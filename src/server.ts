@@ -1,4 +1,4 @@
-import express from "express";
+import express, { Router, Request, Response } from "express";
 import dotenv from 'dotenv'
 dotenv.config()
 
@@ -9,25 +9,18 @@ import { Config } from "./infrastructure/configuration";
 (async () => {
   
   const app = express();
-  const configuration = await new Config().setToken()
-
-  if (!configuration.appToken) {
-    //configuration.refreshToken = await configuration.getRefreshToken(configuration.refreshToken)
-    const refresh_token = await configuration.getRefreshToken()
-    configuration.refreshToken = refresh_token.refreshToken
-    console.log(refresh_token)
-  }
+  const config = new Config();
+  await config.generateAccessToken();
   
   app.use(express.json());
   app.use(express.urlencoded({ extended: true }));
-
   
-  app.use("/users", userRouter(configuration.appToken));
+  app.use("/users", userRouter(config.appToken));
 
-
-  app.listen(configuration.port, () => {
+  app.listen(config.port, () => {
     console.log("Server running on port 3000");
   });
+
 })();
 
 
