@@ -62,9 +62,15 @@ export function artistRouter (config: Configuration) : Router {
         try {
             spotifyAccess.setAccessToken(config.appToken)
             const response = await spotifyAccess.getArtists(['5K4W6rqBFWDnAN6FQUkS6x', '3nFkdlSjzX9mRTtwJOzDYB']) as any;
-            console.log(response.body)
+            
+            const jointAlbum = await spotifyAccess.getAlbum('2P2Xwvh2xWXIZ1OWY9S9o5')
+            console.log(jointAlbum.body)
             res.status(200).json({
-                name: response.body.artists.map((i: { name: any; }) => i.name),
+                artistsNames: response.body.artists.map((i: { name: any; }) => i.name).join(', '),
+                jointAlbum: jointAlbum.body.name,
+                joinAlbumLabel: jointAlbum.body.label,
+                jointAlbumImage: jointAlbum.body.images[0].url,
+                jointAlbumUri: jointAlbum.body.href,
             })
         } catch (err) {
             res.json(err)
