@@ -18,6 +18,19 @@ export class Config implements Configuration {
     }
     public async setToken() {
         try {
+        
+        const {token, expires} = await this.getToken()
+        this.appToken = token;
+
+        setTimeout(this.setToken.bind(this), expires * 900);
+
+        } catch (err) {
+            console.error(err)
+            throw err;
+        }
+    }
+
+    private async getToken(): Promise<{token: string, expires: number}> {
         const qsGrandType =qs.stringify({'grant_type':'client_credentials'});
         const authHeader = Buffer.from(this.clientId + ':' + this.clientSecret).toString('base64');
         const response = await axios({
@@ -30,12 +43,9 @@ export class Config implements Configuration {
             url: 'https://accounts.spotify.com/api/token',
         })
 
-        this.appToken = (response as any).data.access_token;
+        const data = (response as any).data;
+        console.log('token refreshed')
 
-        return this;
-        } catch (err) {
-            console.error(err)
-            throw err;
-        }
+        return {token: data.access_token, expires: data.expires_in }
     }
     }

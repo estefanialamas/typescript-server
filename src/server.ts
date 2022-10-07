@@ -9,7 +9,8 @@ import { Config } from "./infrastructure/configuration";
 (async () => {
   
   const app = express();
-  const configuration = await new Config().setToken();
+  const configuration = await new Config();
+  await configuration.setToken();
   
   app.use(express.json());
   app.use(express.urlencoded({ extended: true }));
@@ -21,7 +22,7 @@ import { Config } from "./infrastructure/configuration";
   //   next();
   // });
   
-  app.use("/users", userRouter(configuration.appToken));
+  app.use("/users", userRouter(configuration));
 
   // const { usersCollection, dogsCollection } = await connectToDatabase();
   // const userRepository: UserRepository = new UserRepositoryMongo(usersCollection);
