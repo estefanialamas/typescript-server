@@ -1,4 +1,4 @@
-import express from "express";
+import express, { Router, Request, Response } from "express";
 import dotenv from 'dotenv'
 dotenv.config()
 
@@ -14,8 +14,6 @@ import { Config } from "./infrastructure/configuration";
   
   app.use(express.json());
   app.use(express.urlencoded({ extended: true }));
-
-
   
   // app.use((req: Request, res: Response, next: NextFunction) => {
   //   console.log("middleware baseUrl", req.baseUrl);
@@ -24,13 +22,10 @@ import { Config } from "./infrastructure/configuration";
   
   app.use("/users", userRouter(configuration));
 
-  // const { usersCollection, dogsCollection } = await connectToDatabase();
-  // const userRepository: UserRepository = new UserRepositoryMongo(usersCollection);
-
-
   app.listen(configuration.port, () => {
     console.log("Server running on port 3000");
   });
+
 })();
 
 

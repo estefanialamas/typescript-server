@@ -1,4 +1,6 @@
 import axios from 'axios'
+import { access } from 'fs';
+import { request } from 'http';
 import qs from 'qs'
 import { Configuration } from "../domain/configuration";
 
@@ -9,6 +11,7 @@ export class Config implements Configuration {
     dbUri: string
     dbName: string
     appToken: string
+    refreshToken: string
     constructor() {
         this.port = process.env.PORT;
         this.clientId =  process.env.CLIENT_ID;
@@ -16,7 +19,7 @@ export class Config implements Configuration {
         this.dbUri= process.env.MONGODB_URI;
         this.dbName= process.env.DB_NAME;
     }
-    public async setToken() {
+    public async setToken(): Promise<void> {
         try {
         
         const {token, expires} = await this.getToken()
@@ -41,11 +44,13 @@ export class Config implements Configuration {
             },
             data: qsGrandType,
             url: 'https://accounts.spotify.com/api/token',
-        })
+        }) as any;
 
         const data = (response as any).data;
         console.log('token refreshed')
 
         return {token: data.access_token, expires: data.expires_in }
     }
-    }
+}
+
+    

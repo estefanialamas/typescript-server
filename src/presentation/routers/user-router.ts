@@ -18,8 +18,6 @@ export function userRouter (config: Configuration): Router {
         } catch (err) {
             res.send(err)
         }
-
-       
     })
 
     return userRouter
