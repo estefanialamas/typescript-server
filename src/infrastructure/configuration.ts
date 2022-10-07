@@ -19,14 +19,14 @@ export class Config implements Configuration {
         this.clientSecret= process.env.CLIENT_SECRET;
         this.dbUri= process.env.MONGODB_URI;
         this.dbName= process.env.DB_NAME;
-        this.scopes = ['user-read-private', 'user-read-email']
     }
     public async setToken(): Promise<void> {
         try {
         
         const {token, expires} = await this.getToken()
         this.appToken = token;
-
+        
+        console.log(token)
         setTimeout(this.setToken.bind(this), expires * 900);
 
         } catch (err) {
@@ -36,10 +36,11 @@ export class Config implements Configuration {
     }
 
     private async getToken(): Promise<{token: string, expires: number}> {
-        const qsGrandType =qs.stringify({'grant_type':'client_credentials'});
+        const qsGrandType =qs.stringify({'grant_type':'client_credentials', 'scope':'user-top-read'});
         const authHeader = Buffer.from(this.clientId + ':' + this.clientSecret).toString('base64');
         const response = await axios({
             method: 'POST',
+
             headers: {
                 'content-type':'application/x-www-form-urlencoded',
                 'Authorization': `Basic ${authHeader}`

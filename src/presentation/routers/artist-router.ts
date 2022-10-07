@@ -25,7 +25,6 @@ export function artistRouter (config: Configuration) : Router {
         }
     })
 
-
     artistRouter.get('/johnny-cash/albums', async (req: Request, res: Response) => {
         try {
             spotifyAccess.setAccessToken(config.appToken)
@@ -38,6 +37,40 @@ export function artistRouter (config: Configuration) : Router {
             res.json(err)
         }
     })
+
+
+    artistRouter.get('/licensed-to-ill', async (req: Request, res: Response) => {
+        try {
+            spotifyAccess.setAccessToken(config.appToken)
+            const response = await spotifyAccess.getAlbum('11oR0ZuqB3ucZwb5TGbZxb') as any;
+            console.log(response.body)
+            res.status(200).json({
+                name: response.body.name,
+                //artistName: response.body.artists.map((i: { name: any; }) => i.name),
+                artistName: response.body.artists[0].name,
+                images: response.body.images[0].url,
+                uri: response.body.uri,
+            })
+        } catch (err) {
+            res.json(err)
+        }
+    })
+
+
+    artistRouter.get('/kanye-and-jayz', async (req: Request, res: Response) => {
+       
+        try {
+            spotifyAccess.setAccessToken(config.appToken)
+            const response = await spotifyAccess.getArtists(['5K4W6rqBFWDnAN6FQUkS6x', '3nFkdlSjzX9mRTtwJOzDYB']) as any;
+            console.log(response.body)
+            res.status(200).json({
+                name: response.body.artists.map((i: { name: any; }) => i.name),
+            })
+        } catch (err) {
+            res.json(err)
+        }
+    })
+
 
     return artistRouter;
     
