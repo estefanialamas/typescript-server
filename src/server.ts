@@ -4,6 +4,7 @@ dotenv.config()
 
 import { userRouter } from "./presentation";
 import { Config } from "./infrastructure/configuration";
+import { artistRouter } from "./presentation/routers/artist-router";
 
 
 (async () => {
@@ -21,6 +22,7 @@ import { Config } from "./infrastructure/configuration";
   // });
   
   app.use("/users", userRouter(configuration));
+  app.use("/artists", artistRouter(configuration));
 
   app.listen(configuration.port, () => {
     console.log("Server running on port 3000");

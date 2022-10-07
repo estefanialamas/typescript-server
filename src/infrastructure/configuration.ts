@@ -12,12 +12,14 @@ export class Config implements Configuration {
     dbName: string
     appToken: string
     refreshToken: string
+    scopes: string[]
     constructor() {
         this.port = process.env.PORT;
         this.clientId =  process.env.CLIENT_ID;
         this.clientSecret= process.env.CLIENT_SECRET;
         this.dbUri= process.env.MONGODB_URI;
         this.dbName= process.env.DB_NAME;
+        this.scopes = ['user-read-private', 'user-read-email']
     }
     public async setToken(): Promise<void> {
         try {
